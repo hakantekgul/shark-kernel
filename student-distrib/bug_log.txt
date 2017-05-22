@@ -1,0 +1,127 @@
+************* BUG LOG FOR SHARK ************************
+
+- PROBLEM: Keyboard interrupts does not happen. Infinite loop??      ***** FIXED - 20 minutes - Hakan Tekgul 
+  SOLUTION: leave, iret command added to return from interrupts. 
+
+- PROBLEM: PIC send EOI for slave doesnt work?                       ***** FIXED - 10 minutes - Hakan Tekgul
+  SOLUTION: Sent EOI to master IRQ2
+
+- PROBLEM: Paging is not working at all? No idea why?      			***** FIXED - 2 hours - Hakan Tekgul
+  SOLUTION: Enabled the 4MB page by inline assembly. 
+
+- PROBLEM: Rtc read neeeds to be fixed. Switch while loop and flag.  ***** FIXED - 40 minutes - Hakan Tekgul
+  SOLUTION: Switched those two statements as TA stated.
+
+- PROBLEM: Keyboard buffer sometimes overflows                       ***** FIXED - 1 hour - Raimi Shah
+  SOLUTION: Buffer size was off. Fixed by subtracting 1.
+
+- PROBLEM: Terminal write bug - should not check for \0              ***** FIXED - 1 hour - Raimi Shah
+  SOLUTION: Removed that check for end of file for executables. 
+
+- PROBLEM:Read data broken - fix non-text files                     ***** FIXED - 3 hour - Raimi Shah
+  SOLUTION: Fixed from terminal_write.
+
+- PROBLEM:Testing cases for 3.2 fish bug - size of buffer           ***** FIXED - 1 hour - Raimi Shah
+  SOLUTION: Size of buffer changed to the right number. 
+
+- PROBLEM: Backspace edge cases and buggy                            ***** FIXED - 10 minutes - Raimi Shah
+  SOLUTION: check buffer index == -1
+
+- PROBLEM: Assembly wrapper needs to be created for interrupts       ***** FIXED - 1 hour - Hakan Tekgul
+  SOLUTION: Created - interrupt_asm.S
+
+- PROBLEM:Execute page faults with iret/context switching           ***** FIXED - 2 hours - Hakan Tekgul
+  SOLUTION: User space stack pointer argument for iret fixed. 
+
+- PROBLEM: Mouse y values are flipped, goes down when we move up     ***** FIXED - 5 minutes - Hakan Tekgul
+  SOLUTION: Multiplied y by -1.
+
+- PROBLEM: Mouse moving really fast and page faults sometimes        ***** FIXED - 5 minutes - Hakan Tekgul
+  SOLUTION: Slowed down the x and y movements by mod(10).
+
+- PROBLEM: Mouse erases the current characters on video memory       ***** FIXED - 15 minutes - Raimi Shah
+  SOLUTION: Saved the last character on screen from buffer. 
+
+- PROBLEM: After shell, nothing happens. Ex: 'ls' doesnt work.       ***** FIXED - 15 minutes - Raimi Shah, Hakan Tekgul
+  SOLUTION: Return value of read syscall was wrong. return bytes read
+
+- PROBLEM: Testprint does not halt, page faults.                     ***** FIXED - 1 hour - Hakan Tekgul
+  SOLUTION: esp,ebp should be kernel stack pointer before jumping   
+
+- PROBLEM: Multiple shells can not be handled.                       ***** FIXED - 1 hours - Raimi Shah
+  SOLUTION: in execute, parent should be set to most recent PID
+
+- PROBLEM: Pingpong does not work. Open? Write? rtc?                 ***** FIXED - 20 minutes - Hakan Tekgul, Raimi Shah
+  SOLUTION: Open was always returning 0. Should return specific fd. 
+
+- PROBLEM: Mouse does not work in the user space. Goes into a loop.  ***** FIXED - 1 week - Hakan Tekgul
+  SOLUTION: asm(leave iret) was wrong. Connected to the asm linkage. 
+            Interrupts were broken because of just leave iret. 
+
+- PROBLEM: ls/open dir does not work. Page faults. No idea why?      ***** FIXED - 1 hour - Hakan Tekgul
+  SOLUTION: read_directory was not returning 0 after end. 
+
+- PROBLEM:cat prints the file but does not halt. Goes into a loop.  ***** FIXED - 1 hour - Raimi Shah
+  SOLUTION: read_data was messed up (added file_position as offset)
+
+- PROBLEM: ls does not work multiple times. verylargetext fails...   ***** FIXED -10 minutes - Hakan Tekgul
+  SOLUTION: cleared the whole buffer before reading the directory. 
+
+- PROBLEM: filecmp will return same file if (hello, hello1)			***** FIXED - 3 minutes - Raimi Shah
+  SOLUTION: rewritten better
+
+- PROBLEM: '  cat __' should work, strip off spaces before it 		***** FIXED - 15 minutes - Raimi Shah
+  SOLUTION: Made the for loop skip the spaces until first letter
+
+- PROBLEM: swapping terminals and opening shell disables kb interrupts**** FIXED - 1 day - Raimi Shah
+  SOLUTION: send_eoi(1) before execute("shell")
+
+- PROBLEM: completing commands in mutiple terminals not working		***** FIXED - 1 hour - Raimi Shah
+  SOLUTION: copy buffers correctly
+
+- PROBLEM: Status bar does not update in terminal swaps.            ***** FIXED - 10 minutes - Hakan Tekgul
+  SOLUTION: called the status bar function in each swap
+
+- PROBLEM: Status bar disappears after vertical scrolling           ***** FIXED - 5 minutes - Hakan Tekgul
+  SOLUTION: WHOLE SCREEN BUFFER SIZE decreased for last row
+
+- PROBLEM: processes dont swap correctly
+  SOLUTION: correct method of find next process (use array[3])		***** FIXED - 2 hours - Raimi Shah, Hakan Tekgul
+
+- PROBLEM: os triple faults after 18 commands 						**** FIXED - 1.5 weeks - Raimi Shah
+  SOLUTION: tss.esp0 not set correctly
+
+- PROBLEM: Different colors across different terminals is not constant. **** FIXED - 1 hours - Hakan Tekgul
+  SOLUTION: Changed ATTRIB everywhere in project based on terminal number.
+ 
+- PROBLEM: Scheduling triple faults in command ls.                   ***** FIXED - 30 minutes - Hakan Tekgul
+  SOLUTION: Found NULL ptr for schedule sp/bp for next_p 
+
+- PROBLEM: With scheduling on, terminal swapping causes page fault. ****** FIXED - 6 hours - Hakan Tekgul & Raimi Shah
+  SOLUTION: Rewrote scheduler and saved esp ebp in scheduler itself, not execute
+
+- PROBLEM: ctrl-l doesnt clear correct memory for multiple terms
+  SOLUTION: calculate correct addr to clear from					***** FIXED - 10 minutes - Raimi Shah
+
+- PROBLEM: With scheduling on, the programs page fault SOMETIMES. It is random. Possible race conditions? NOT FIXED -------
+
+- PROBLEM: Hello buffer overflow does not work                       ***** FIXED - 1 hours - Raimi Shah
+  SOLUTION: Checked for buffer size, 128 byte reserved for newline. 
+
+- PROBLEM: Sometimes, weird characters appear on screen??            ***** FIXED - 2 hours - Hakan Tekgul
+  SOLUTION: Added some cli() s to prevent race conditions. 
+
+- PROBLEM: Backspace is not working correctly on multiple terminals. ***** FIXED - 20 minutes - Raimi Shah & Hakan Tekgul
+  SOLUTION: Cleared the buffer correctly for each terminal and updated cursor.
+
+- PROBLEM: Shell buffer overflow does not work                       ***** FIXED - 10 minutes - Raimi Shah
+  SOLUTION: Same thing for hello buffer overflow. 
+
+- PROBLEM: PC Speakers do not work. No sound coming.                 ***** FIXED - 1 hour - Hakan Tekgul 
+  SOLUTION: Enabled -sounhw all on QEMU thanks to Tanishq. 
+
+- PROBLEM: Status bar timer does not update minutes correctly.       ***** FIXED - 40 minutes - Hakan Tekgul 
+  SOLUTION: Checked for digit 9 and 0 in minutes and updated corrrectly. 
+
+ *********** END OF BUG LOG *******************************************************************************
+

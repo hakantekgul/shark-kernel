@@ -1,0 +1,66 @@
+boot.o: boot.S multiboot.h x86_desc.h types.h
+interrupt_asm.o: interrupt_asm.S x86_desc.h types.h
+spin_lock.o: spin_lock.S x86_desc.h types.h
+x86_desc.o: x86_desc.S x86_desc.h types.h
+filesystem.o: filesystem.c filesystem.h lib.h types.h terminal.h \
+  keyboard.h debug.h i8259.h kboard_map.h interrupt_asm.h \
+  more_terminals.h multiboot.h x86_desc.h idt.h mouse.h rtc.h sys_calls.h \
+  paging.h pit.h schedule.h
+i8259.o: i8259.c i8259.h types.h lib.h terminal.h keyboard.h debug.h \
+  kboard_map.h interrupt_asm.h more_terminals.h multiboot.h x86_desc.h \
+  idt.h mouse.h rtc.h sys_calls.h filesystem.h paging.h pit.h schedule.h
+idt.o: idt.c idt.h debug.h i8259.h types.h lib.h terminal.h keyboard.h \
+  kboard_map.h interrupt_asm.h more_terminals.h multiboot.h x86_desc.h \
+  rtc.h filesystem.h sys_calls.h mouse.h paging.h schedule.h pit.h
+kboard_map.o: kboard_map.c kboard_map.h
+kernel.o: kernel.c multiboot.h types.h x86_desc.h lib.h terminal.h \
+  keyboard.h debug.h i8259.h kboard_map.h interrupt_asm.h \
+  more_terminals.h idt.h mouse.h rtc.h sys_calls.h filesystem.h paging.h \
+  pit.h schedule.h spin_lock.h pc_speaker.h
+keyboard.o: keyboard.c keyboard.h debug.h i8259.h types.h lib.h \
+  terminal.h more_terminals.h multiboot.h x86_desc.h idt.h mouse.h rtc.h \
+  sys_calls.h filesystem.h paging.h pit.h schedule.h kboard_map.h \
+  interrupt_asm.h pc_speaker.h
+kmalloc.o: kmalloc.c types.h lib.h terminal.h keyboard.h debug.h i8259.h \
+  kboard_map.h interrupt_asm.h more_terminals.h multiboot.h x86_desc.h \
+  idt.h mouse.h rtc.h sys_calls.h filesystem.h paging.h pit.h schedule.h
+lib.o: lib.c lib.h types.h terminal.h keyboard.h debug.h i8259.h \
+  kboard_map.h interrupt_asm.h more_terminals.h multiboot.h x86_desc.h \
+  idt.h mouse.h rtc.h sys_calls.h filesystem.h paging.h pit.h schedule.h
+more_terminals.o: more_terminals.c more_terminals.h debug.h i8259.h \
+  types.h lib.h terminal.h keyboard.h kboard_map.h interrupt_asm.h \
+  sys_calls.h multiboot.h x86_desc.h idt.h mouse.h rtc.h pit.h schedule.h \
+  filesystem.h paging.h
+mouse.o: mouse.c mouse.h debug.h i8259.h types.h lib.h terminal.h \
+  keyboard.h kboard_map.h interrupt_asm.h more_terminals.h multiboot.h \
+  x86_desc.h idt.h sys_calls.h rtc.h filesystem.h paging.h pit.h \
+  schedule.h
+paging.o: paging.c paging.h types.h terminal.h keyboard.h debug.h i8259.h \
+  lib.h more_terminals.h multiboot.h x86_desc.h idt.h mouse.h rtc.h \
+  sys_calls.h filesystem.h pit.h schedule.h kboard_map.h interrupt_asm.h
+pc_speaker.o: pc_speaker.c pc_speaker.h debug.h i8259.h types.h lib.h \
+  terminal.h keyboard.h kboard_map.h interrupt_asm.h more_terminals.h \
+  multiboot.h x86_desc.h idt.h mouse.h rtc.h sys_calls.h filesystem.h \
+  paging.h pit.h schedule.h
+pit.o: pit.c pit.h debug.h i8259.h types.h lib.h terminal.h keyboard.h \
+  kboard_map.h interrupt_asm.h more_terminals.h multiboot.h x86_desc.h \
+  idt.h mouse.h rtc.h sys_calls.h filesystem.h paging.h schedule.h
+rtc.o: rtc.c rtc.h debug.h i8259.h types.h lib.h terminal.h keyboard.h \
+  kboard_map.h interrupt_asm.h more_terminals.h multiboot.h x86_desc.h \
+  idt.h mouse.h sys_calls.h filesystem.h paging.h pit.h schedule.h
+schedule.o: schedule.c schedule.h debug.h i8259.h types.h lib.h \
+  terminal.h keyboard.h kboard_map.h interrupt_asm.h more_terminals.h \
+  multiboot.h x86_desc.h idt.h mouse.h rtc.h sys_calls.h filesystem.h \
+  paging.h pit.h
+sound.o: sound.c sound.h debug.h i8259.h types.h lib.h terminal.h \
+  keyboard.h kboard_map.h interrupt_asm.h more_terminals.h multiboot.h \
+  x86_desc.h idt.h mouse.h rtc.h sys_calls.h filesystem.h paging.h pit.h \
+  schedule.h
+sys_calls.o: sys_calls.c sys_calls.h debug.h i8259.h types.h lib.h \
+  terminal.h keyboard.h kboard_map.h interrupt_asm.h more_terminals.h \
+  multiboot.h x86_desc.h idt.h mouse.h rtc.h pit.h schedule.h \
+  filesystem.h paging.h
+terminal.o: terminal.c terminal.h keyboard.h debug.h i8259.h types.h \
+  lib.h more_terminals.h multiboot.h x86_desc.h idt.h mouse.h rtc.h \
+  sys_calls.h filesystem.h paging.h pit.h schedule.h kboard_map.h \
+  interrupt_asm.h
